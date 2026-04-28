@@ -1,20 +1,26 @@
 import React, { useState } from "react";
-import { Box, Button, TextField, Typography, Paper } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Box, Button, TextField, Paper, Typography } from "@mui/material";
 
 function LoginForm() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      alert("Please fill all fields");
-      return;
-    }
+    if (email === "admin@gmail.com" && password === "1234") {
+      localStorage.setItem("auth", "true"); // store login state
+      // optional safety delay
+        setTimeout(() => {
+        navigate("/dashboard");
+        }, 100);
 
-    console.log({ email, password });
-    alert("Login Successful!");
+        }else {
+      alert("Invalid Credentials");
+    }
   };
 
   return (
@@ -24,18 +30,17 @@ function LoginForm() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#f4f6f8",
+        background: "#f5f5f5",
       }}
     >
-      <Paper elevation={6} sx={{ padding: 4, width: 350 }}>
-        <Typography variant="h5" align="center" gutterBottom>
+      <Paper sx={{ p: 4, width: 350 }}>
+        <Typography variant="h5" textAlign="center">
           Login
         </Typography>
 
         <form onSubmit={handleLogin}>
           <TextField
             label="Email"
-            type="email"
             fullWidth
             margin="normal"
             value={email}
@@ -51,12 +56,7 @@ function LoginForm() {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            sx={{ mt: 2 }}
-          >
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
             Login
           </Button>
         </form>
