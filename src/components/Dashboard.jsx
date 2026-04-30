@@ -38,7 +38,6 @@ function Dashboard() {
   const [open, setOpen] = useState(true);
   const [active, setActive] = useState("dashboard");
 
-  // CRUD state
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -49,14 +48,14 @@ function Dashboard() {
 
   const navigate = useNavigate();
 
+  const toggleDrawer = () => setOpen(!open);
+
+  // ✅ ONLY ONE LOGOUT FUNCTION (FIXED)
   const handleLogout = () => {
     localStorage.removeItem("auth");
     navigate("/");
   };
 
-  const toggleDrawer = () => setOpen(!open);
-
-  // Fetch users
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((res) => res.json())
@@ -100,10 +99,16 @@ function Dashboard() {
     setUsers(
       users.map((u) =>
         u.id === editId
-          ? { ...u, name: form.name, email: form.email, address: { city: form.city } }
+          ? {
+              ...u,
+              name: form.name,
+              email: form.email,
+              address: { city: form.city },
+            }
           : u
       )
     );
+
     setEditId(null);
     setForm({ name: "", email: "", city: "" });
   };
@@ -132,7 +137,7 @@ function Dashboard() {
         </Box>
 
         <List>
-          <ListItemButton onClick={() => setActive("dashboard")}>
+          <ListItemButton>
             <ListItemIcon sx={{ color: "#fff" }}>
               <DashboardIcon />
             </ListItemIcon>
@@ -176,7 +181,7 @@ function Dashboard() {
             Users
           </Typography>
 
-          {/* 🔽 FORM */}
+          {/* FORM */}
           <Box sx={{ mb: 3 }}>
             <TextField
               label="Name"
@@ -214,7 +219,7 @@ function Dashboard() {
             )}
           </Box>
 
-          {/* 🔍 Search */}
+          {/* SEARCH */}
           <TextField
             label="Search users..."
             fullWidth
@@ -223,20 +228,19 @@ function Dashboard() {
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          {/* Cards */}
+          {/* CARDS */}
           {loading ? (
             <CircularProgress />
           ) : (
             <Grid container spacing={3}>
               {filteredUsers.map((user) => (
-                <Grid key={user.id} xs={12} sm={6} md={4}>
+                <Grid item xs={12} sm={6} md={4} key={user.id}>
                   <Card>
                     <CardContent>
                       <Typography variant="h6">{user.name}</Typography>
                       <Typography>{user.email}</Typography>
                       <Typography>{user.address?.city}</Typography>
 
-                      {/* ✅ BUTTONS INSIDE MAP */}
                       <Box sx={{ mt: 2 }}>
                         <Button
                           onClick={() => handleEditUser(user)}
@@ -254,7 +258,6 @@ function Dashboard() {
                           Delete
                         </Button>
                       </Box>
-
                     </CardContent>
                   </Card>
                 </Grid>

@@ -1,12 +1,10 @@
-import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
 import Dashboard from "./components/Dashboard";
 
-// Protected Route Component
+// Protected Route
 function ProtectedRoute({ children }) {
   const isAuth = localStorage.getItem("auth") === "true";
-
   return isAuth ? children : <Navigate to="/" />;
 }
 
@@ -14,10 +12,11 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+
         {/* Login Page */}
         <Route path="/" element={<LoginForm />} />
 
-        {/* Protected Dashboard */}
+        {/* Dashboard (Protected) */}
         <Route
           path="/dashboard"
           element={
@@ -26,6 +25,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
       </Routes>
     </BrowserRouter>
   );
